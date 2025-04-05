@@ -1,0 +1,106 @@
+13:15
+You sent
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2025 Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .month {
+      margin-bottom: 3rem;
+    }
+    .table td, .table th {
+      width: 14.28%;
+      height: 100px;
+      vertical-align: top;
+    }
+    .weekend {
+      background-color: #f8d7da;
+    }
+    .month-name {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="text-center mb-5">2025 Calendar</h1>
+    <div id="calendar"></div>
+  </div>
+
+  <script>
+    const calendarContainer = document.getElementById("calendar");
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    function createCalendar(year) {
+      for (let month = 0; month < 12; month++) {
+        const date = new Date(year, month, 1);
+        const monthDiv = document.createElement("div");
+        monthDiv.className = "month";
+
+        const monthTitle = document.createElement("div");
+        monthTitle.className = "month-name";
+        monthTitle.textContent = monthNames[month];
+        monthDiv.appendChild(monthTitle);
+
+        const table = document.createElement("table");
+        table.className = "table table-bordered table-sm text-center";
+
+        const thead = document.createElement("thead");
+        const headRow = document.createElement("tr");
+        ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
+          const th = document.createElement("th");
+          th.textContent = day;
+          headRow.appendChild(th);
+        });
+        thead.appendChild(headRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+        let row = document.createElement("tr");
+
+        // Fill initial empty cells
+        for (let i = 0; i < date.getDay(); i++) {
+          row.appendChild(document.createElement("td"));
+        }
+
+        while (date.getMonth() === month) {
+          const dayCell = document.createElement("td");
+          dayCell.textContent = date.getDate();
+          const dayOfWeek = date.getDay();
+          if (dayOfWeek === 0 || dayOfWeek === 6) {
+            dayCell.classList.add("weekend");
+          }
+          row.appendChild(dayCell);
+
+          if (dayOfWeek === 6) {
+            tbody.appendChild(row);
+            row = document.createElement("tr");
+          }
+
+          date.setDate(date.getDate() + 1);
+        }
+
+        // Append any remaining cells
+        if (row.children.length > 0) {
+          while (row.children.length < 7) {
+            row.appendChild(document.createElement("td"));
+          }
+          tbody.appendChild(row);
+        }
+
+        table.appendChild(tbody);
+        monthDiv.appendChild(table);
+        calendarContainer.appendChild(monthDiv);
+      }
+    }
+
+    createCalendar(2025);
+  </script>
+</body>
+</html>
